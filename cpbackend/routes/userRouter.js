@@ -13,5 +13,9 @@ router.post('/friends/add', authMiddleware, userController.addFriend);
 router.get('/friends', authMiddleware, userController.getFriends);
 router.post('/friends/remove', authMiddleware, userController.removeFriend);
 router.get('/lc-topics',authMiddleware,userController.getLCTopics)
+router.get('/upcoming-contests', authMiddleware, userController.getUpcomingContests);
+router.post('/goals', authMiddleware, userController.saveGoals);
+router.get('/goals', authMiddleware, userController.getGoals);
+router.get('/daily-challenge', authMiddleware, userController.getDailyChallenge);
 
 module.exports = router;

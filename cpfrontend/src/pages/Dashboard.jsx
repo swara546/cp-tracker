@@ -15,48 +15,70 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState("all");
     const [lcTopics, setLcTopics] = useState([]);
+    const [contests, setContests] = useState([]);
+    const [goals, setGoals] = useState(null);
+    const [dailyChallenge, setDailyChallenge] = useState(null);
+
+    const fetchStats = async () => {
+        setLoading(true);
+        try {
+            const cfRes = await fetch("http://localhost:3000/api/user/cf-stats", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const cfData = await cfRes.json();
+            setCfStats(cfData);
+
+            const lcRes = await fetch("http://localhost:3000/api/user/lc-stats", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const lcData = await lcRes.json();
+            setLcStats(lcData);
+
+            const histRes = await fetch("http://localhost:3000/api/user/cf-history", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const histData = await histRes.json();
+            setCfHistory(histData.history);
+
+            const weakRes = await fetch("http://localhost:3000/api/user/weak-area", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const weakData = await weakRes.json();
+            setSuggestion(weakData.suggestion);
+
+            const topicsRes = await fetch("http://localhost:3000/api/user/lc-topics", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const topicsData = await topicsRes.json();
+            setLcTopics(topicsData.topics || []);
+
+            const contestsRes = await fetch("http://localhost:3000/api/user/upcoming-contests", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const contestsData = await contestsRes.json();
+            setContests(contestsData.contests || []);
+
+            const goalsRes = await fetch("http://localhost:3000/api/user/goals", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const goalsData = await goalsRes.json();
+            setGoals(goalsData.goals);
+
+            const dailyRes = await fetch("http://localhost:3000/api/user/daily-challenge", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const dailyData = await dailyRes.json();
+            setDailyChallenge(dailyData);
+
+            setLoading(false);
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!token) return;
-        const fetchStats = async () => {
-            try {
-                const cfRes = await fetch("http://localhost:3000/api/user/cf-stats", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const cfData = await cfRes.json();
-                setCfStats(cfData);
-
-                const lcRes = await fetch("http://localhost:3000/api/user/lc-stats", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const lcData = await lcRes.json();
-                setLcStats(lcData);
-
-                const histRes = await fetch("http://localhost:3000/api/user/cf-history", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const histData = await histRes.json();
-                setCfHistory(histData.history);
-
-                const weakRes = await fetch("http://localhost:3000/api/user/weak-area", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const weakData = await weakRes.json();
-                setSuggestion(weakData.suggestion);
-
-                const topicsRes = await fetch("http://localhost:3000/api/user/lc-topics", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const topicsData = await topicsRes.json();
-                console.log("Topics:", topicsData);
-                setLcTopics(topicsData.topics || []);
-
-                setLoading(false);
-            } catch (err) {
-                console.log(err);
-                setLoading(false);
-            }
-        };
         fetchStats();
     }, [token]);
 
@@ -181,6 +203,137 @@ const Dashboard = () => {
                         </div>
                     )}
                 </div>
+
+                        {/* Daily Challenge */}
+{dailyChallenge && !dailyChallenge.message && (viewMode === "all" || viewMode === "lc") && (
+    <div style={{ marginBottom: "28px" }}>
+        <h2 style={{ color: "#2d3561", marginBottom: "16px" }}>📅 Today's LC Challenge</h2>
+        <div style={{
+            background: "white", padding: "24px", borderRadius: "16px",
+            boxShadow: "0 8px 32px rgba(100,120,200,0.15)",
+            borderLeft: `4px solid ${
+                dailyChallenge.difficulty === "Easy" ? "#00b8a3" :
+                dailyChallenge.difficulty === "Medium" ? "#ffc01e" : "#ff375f"
+            }`
+        }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                <div>
+                    <h3 style={{ color: "#2d3561", fontSize: "18px", marginBottom: "8px" }}>
+                        {dailyChallenge.title}
+                    </h3>
+                    <span style={{
+                        padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "bold",
+                        background: dailyChallenge.difficulty === "Easy" ? "#e8f8f5" :
+                                   dailyChallenge.difficulty === "Medium" ? "#fff8e1" : "#fff0f0",
+                        color: dailyChallenge.difficulty === "Easy" ? "#00b8a3" :
+                               dailyChallenge.difficulty === "Medium" ? "#ffc01e" : "#ff375f"
+                    }}>
+                        {dailyChallenge.difficulty}
+                    </span>
+                    <div style={{ marginTop: "10px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                        {dailyChallenge.topics.map(t => (
+                            <span key={t} style={{
+                                padding: "3px 10px", borderRadius: "12px", fontSize: "11px",
+                                background: "#e8eaf6", color: "#2d3561"
+                            }}>{t}</span>
+                        ))}
+                    </div>
+                </div>
+                <a href={dailyChallenge.link} target="_blank" style={{
+                    padding: "10px 24px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
+                    color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "14px"
+                }}>
+                    Solve Now →
+                </a>
+            </div>
+        </div>
+    </div>
+)}
+
+                    {/* Upcoming Contests */}
+                {contests.length > 0 && (
+                    <div style={{ marginBottom: "28px" }}>
+                        <h2 style={{ color: "#2d3561", marginBottom: "16px" }}>🏆 Upcoming Codeforces Contests</h2>
+                        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+                            {contests.map((contest) => (
+                                <div key={contest.id} style={{
+                                    background: "white", padding: "20px", borderRadius: "16px",
+                                    boxShadow: "0 8px 32px rgba(100,120,200,0.15)",
+                                    flex: "1", minWidth: "250px",
+                                    borderLeft: "4px solid #7986cb"
+                                }}>
+                                    <h3 style={{ color: "#2d3561", fontSize: "15px", marginBottom: "10px" }}>{contest.name}</h3>
+                                    <p style={{ color: "#7986cb", fontSize: "13px" }}>🕐 {contest.startTime}</p>
+                                    <p style={{ color: "#7986cb", fontSize: "13px" }}>⏱ Duration: {contest.duration}</p>
+                                    <p style={{ color: "#7986cb", fontSize: "13px" }}>📌 Type: {contest.type}</p>
+                                    <a href={`https://codeforces.com/contest/${contest.id}`} target="_blank"
+                                        style={{
+                                            display: "inline-block", marginTop: "12px",
+                                            padding: "6px 14px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
+                                            color: "white", borderRadius: "20px", fontSize: "12px", textDecoration: "none"
+                                        }}>
+                                        View Contest →
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Progress Goals */}
+{goals && cfStats && lcStats && (
+    <div style={{ marginBottom: "28px" }}>
+        <h2 style={{ color: "#2d3561", marginBottom: "16px" }}>🎯 Your Goals</h2>
+        <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+
+            {/* CF Rating Goal */}
+            {goals.cfRatingGoal > 0 && (viewMode === "all" || viewMode === "cf") && (
+                <div style={{
+                    background: "white", padding: "24px", borderRadius: "16px",
+                    boxShadow: "0 8px 32px rgba(100,120,200,0.15)", flex: 1
+                }}>
+                    <h3 style={{ color: "#2d3561", marginBottom: "12px" }}>⚡ CF Rating Goal</h3>
+                    <p style={{ color: "#7986cb" }}>Current: <strong>{cfStats.rating}</strong> / Target: <strong>{goals.cfRatingGoal}</strong></p>
+                    <div style={{ background: "#e8eaf6", borderRadius: "10px", height: "12px", margin: "12px 0" }}>
+                        <div style={{
+                            background: "linear-gradient(135deg, #2d3561, #7986cb)",
+                            width: `${Math.min((cfStats.rating / goals.cfRatingGoal) * 100, 100)}%`,
+                            height: "12px", borderRadius: "10px"
+                        }} />
+                    </div>
+                    <p style={{ color: "#7986cb", fontSize: "13px" }}>
+                        {cfStats.rating >= goals.cfRatingGoal
+                            ? "🎉 Goal achieved!"
+                            : `${goals.cfRatingGoal - cfStats.rating} more rating points to go!`}
+                    </p>
+                </div>
+            )}
+
+            {/* LC Solved Goal */}
+            {goals.lcSolvedGoal > 0 && (viewMode === "all" || viewMode === "lc") && (
+                <div style={{
+                    background: "white", padding: "24px", borderRadius: "16px",
+                    boxShadow: "0 8px 32px rgba(100,120,200,0.15)", flex: 1
+                }}>
+                    <h3 style={{ color: "#2d3561", marginBottom: "12px" }}>🟡 LC Solved Goal</h3>
+                    <p style={{ color: "#7986cb" }}>Current: <strong>{lcStats.totalSolved}</strong> / Target: <strong>{goals.lcSolvedGoal}</strong></p>
+                    <div style={{ background: "#e8eaf6", borderRadius: "10px", height: "12px", margin: "12px 0" }}>
+                        <div style={{
+                            background: "linear-gradient(135deg, #00b8a3, #ffc01e)",
+                            width: `${Math.min((lcStats.totalSolved / goals.lcSolvedGoal) * 100, 100)}%`,
+                            height: "12px", borderRadius: "10px"
+                        }} />
+                    </div>
+                    <p style={{ color: "#7986cb", fontSize: "13px" }}>
+                        {lcStats.totalSolved >= goals.lcSolvedGoal
+                            ? "🎉 Goal achieved!"
+                            : `${goals.lcSolvedGoal - lcStats.totalSolved} more problems to go!`}
+                    </p>
+                </div>
+            )}
+        </div>
+    </div>
+)}
 
                 {/* Charts */}
                 <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
