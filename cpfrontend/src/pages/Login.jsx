@@ -7,6 +7,7 @@ const Login = () => {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -56,14 +57,27 @@ const Login = () => {
             onChange={handleChange}
             style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none" }}
           />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            autoComplete="current-password"
-            onChange={handleChange}
-            style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none" }}
-          />
+          <div style={{ position: "relative" }}>
+              <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                  style={{
+                      padding: "12px 16px", borderRadius: "8px",
+                      border: "1px solid #c5cae9", fontSize: "14px",
+                      outline: "none", width: "100%", boxSizing: "border-box"
+                  }}
+              />
+              <span onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                      position: "absolute", right: "12px", top: "50%",
+                      transform: "translateY(-50%)", cursor: "pointer", fontSize: "18px"
+                  }}>
+                  {showPassword ? "🙈" : "👁️"}
+              </span>
+          </div>
           <button type="submit" style={{
             padding: "12px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
             color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", marginTop: "8px"

@@ -5,6 +5,7 @@ import BASE_URL from "../config";
 const Register = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -77,7 +78,27 @@ const Register = () => {
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <input name="username" placeholder="Username" onChange={handleChange} style={inputStyle} autoComplete="username" />
           <input name="email" placeholder="Email" onChange={handleChange} style={inputStyle} autoComplete="email" />
-          <input name="password" type="password" placeholder="Password" onChange={handleChange} style={inputStyle} autoComplete="new-password" />
+          <div style={{ position: "relative" }}>
+            <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                autoComplete="current-password"
+                onChange={handleChange}
+                style={{
+                    padding: "12px 16px", borderRadius: "8px",
+                    border: "1px solid #c5cae9", fontSize: "14px",
+                    outline: "none", width: "100%", boxSizing: "border-box"
+                }}
+            />
+            <span onClick={() => setShowPassword(!showPassword)}
+                style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)", cursor: "pointer", fontSize: "18px"
+                }}>
+                {showPassword ? "🙈" : "👁️"}
+            </span>
+        </div>
           <p style={{ color: "#7986cb", fontSize: "12px", margin: "-8px 0" }}>
             Min 6 chars, one uppercase, one number, one special character
           </p>
