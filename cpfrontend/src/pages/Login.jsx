@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import BASE_URL from "../config";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -36,17 +36,11 @@ const Login = () => {
     <div style={{
       minHeight: "100vh",
       background: "linear-gradient(135deg, #e8eaf6, #e3f2fd)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
+      display: "flex", alignItems: "center", justifyContent: "center"
     }}>
       <div style={{
-        background: "white",
-        padding: "40px",
-        borderRadius: "16px",
-        boxShadow: "0 8px 32px rgba(100,120,200,0.15)",
-        width: "100%",
-        maxWidth: "400px"
+        background: "white", padding: "40px", borderRadius: "16px",
+        boxShadow: "0 8px 32px rgba(100,120,200,0.15)", width: "100%", maxWidth: "400px"
       }}>
         <h2 style={{ textAlign: "center", color: "#2d3561", marginBottom: "24px", fontSize: "26px" }}>
           ⚡ CP Tracker
@@ -56,39 +50,23 @@ const Login = () => {
         </p>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <input
-            name="email"
-            placeholder="Email"
+            name="username"
+            placeholder="Username"
+            autoComplete="username"
             onChange={handleChange}
-            style={{
-              padding: "12px 16px",
-              borderRadius: "8px",
-              border: "1px solid #c5cae9",
-              fontSize: "14px",
-              outline: "none"
-            }}
+            style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none" }}
           />
           <input
             name="password"
             type="password"
             placeholder="Password"
+            autoComplete="current-password"
             onChange={handleChange}
-            style={{
-              padding: "12px 16px",
-              borderRadius: "8px",
-              border: "1px solid #c5cae9",
-              fontSize: "14px",
-              outline: "none"
-            }}
+            style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none" }}
           />
           <button type="submit" style={{
-            padding: "12px",
-            background: "linear-gradient(135deg, #2d3561, #7986cb)",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            cursor: "pointer",
-            marginTop: "8px"
+            padding: "12px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
+            color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", marginTop: "8px"
           }}>
             Login
           </button>
