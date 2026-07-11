@@ -1,13 +1,11 @@
 const UserDetails = require('../model/user')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
-const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'})
 
 exports.register = async(req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
-        // Password requirements
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{6,})$/;
         if (!passwordRegex.test(password)) {
             return res.status(400).json({ 
@@ -24,6 +22,7 @@ exports.register = async(req, res, next) => {
         const user = new UserDetails({ username, email, password: hashPassword });
         await user.save();
         res.status(201).json({ message: "User registered successfully" });
+
     } catch(err) {
         res.status(500).json({ message: err.message });
     }
@@ -32,7 +31,9 @@ exports.register = async(req, res, next) => {
 exports.login = async(req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await UserDetails.findOne({ username });
+        const user = await UserDetails.findOne({ 
+            username: { $regex: new RegExp(`^${username}$`, 'i') } 
+        });
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }
