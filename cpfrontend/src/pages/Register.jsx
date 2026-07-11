@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BASE_URL from "../config";
 
 const Register = () => {
-  const [form, setForm] = useState({ username: "", email: "", password: "", codeforces: "", leetcode: "" });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -29,13 +29,7 @@ const Register = () => {
       return;
     }
 
-    if (!form.codeforces || !form.leetcode) {
-      setError("Please enter both Codeforces and LeetCode handles");
-      return;
-    }
-
     try {
-      // Register user
       const res = await fetch(`${BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,25 +40,8 @@ const Register = () => {
         setError(data.message);
         return;
       }
-
-      // Login to get token
-      const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: form.username, password: form.password }),
-      });
-      const loginData = await loginRes.json();
-      localStorage.setItem("token", loginData.token);
-
-      // Save handles
-      await fetch(`${BASE_URL}/api/user/handles`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${loginData.token}` },
-        body: JSON.stringify({ codeforces: form.codeforces, leetcode: form.leetcode }),
-      });
-
-      navigate("/dashboard");
-
+      alert("Registered successfully! Please login.");
+      navigate("/");
     } catch (err) {
       setError("Something went wrong");
     }
@@ -101,22 +78,14 @@ const Register = () => {
           <input name="username" placeholder="Username" onChange={handleChange} style={inputStyle} autoComplete="username" />
           <input name="email" placeholder="Email" onChange={handleChange} style={inputStyle} autoComplete="email" />
           <input name="password" type="password" placeholder="Password" onChange={handleChange} style={inputStyle} autoComplete="new-password" />
-          
           <p style={{ color: "#7986cb", fontSize: "12px", margin: "-8px 0" }}>
             Min 6 chars, one uppercase, one number, one special character
           </p>
-
-          <hr style={{ border: "none", borderTop: "1px solid #e8eaf6" }} />
-          <p style={{ color: "#2d3561", fontWeight: "500", margin: "0" }}>Your Platform Handles</p>
-
-          <input name="codeforces" placeholder="Codeforces Handle" onChange={handleChange} style={inputStyle} />
-          <input name="leetcode" placeholder="LeetCode Handle" onChange={handleChange} style={inputStyle} />
-
           <button type="submit" style={{
             padding: "12px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
             color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", marginTop: "8px"
           }}>
-            Register & Get Started
+            Register
           </button>
         </form>
 
