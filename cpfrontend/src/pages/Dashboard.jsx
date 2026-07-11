@@ -22,49 +22,49 @@ const Dashboard = () => {
     const fetchStats = async () => {
         setLoading(true);
         try {
-            const cfRes = await fetch("http://localhost:3000/api/user/cf-stats", {
+            const cfRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/cf-stats", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const cfData = await cfRes.json();
             setCfStats(cfData);
 
-            const lcRes = await fetch("http://localhost:3000/api/user/lc-stats", {
+            const lcRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/lc-stats", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const lcData = await lcRes.json();
             setLcStats(lcData);
 
-            const histRes = await fetch("http://localhost:3000/api/user/cf-history", {
+            const histRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/cf-history", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const histData = await histRes.json();
             setCfHistory(histData.history);
 
-            const weakRes = await fetch("http://localhost:3000/api/user/weak-area", {
+            const weakRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/weak-area", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const weakData = await weakRes.json();
             setSuggestion(weakData.suggestion);
 
-            const topicsRes = await fetch("http://localhost:3000/api/user/lc-topics", {
+            const topicsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/lc-topics", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const topicsData = await topicsRes.json();
             setLcTopics(topicsData.topics || []);
 
-            const contestsRes = await fetch("http://localhost:3000/api/user/upcoming-contests", {
+            const contestsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/upcoming-contests", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const contestsData = await contestsRes.json();
             setContests(contestsData.contests || []);
 
-            const goalsRes = await fetch("http://localhost:3000/api/user/goals", {
+            const goalsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/goals", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const goalsData = await goalsRes.json();
             setGoals(goalsData.goals);
 
-            const dailyRes = await fetch("http://localhost:3000/api/user/daily-challenge", {
+            const dailyRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/daily-challenge", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const dailyData = await dailyRes.json();

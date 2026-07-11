@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
 const authMiddleware = (req,res,next)=>{
     try{
