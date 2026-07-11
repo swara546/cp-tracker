@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
+import BASE_URL from "../config";
 
 const Profile = () => {
     const [handles, setHandles] = useState({ codeforces: "", leetcode: "" });
@@ -20,7 +21,7 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/handles", {
+            const res = await fetch(`${BASE_URL}/api/user/handles`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify(handles),
@@ -39,7 +40,7 @@ const Profile = () => {
     const handleGoalSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/goals", {
+            const res = await fetch(`${BASE_URL}/api/user/goals`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify({

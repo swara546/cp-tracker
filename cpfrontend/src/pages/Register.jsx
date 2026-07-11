@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../config";
 
 const Register = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -18,7 +19,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/auth/register", {
+      const res = await fetch(`${BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

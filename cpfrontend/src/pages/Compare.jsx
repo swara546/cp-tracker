@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
+import BASE_URL from "../config";
 
 const Compare = () => {
     const [newCFHandle, setNewCFHandle] = useState("");
@@ -17,7 +18,7 @@ const Compare = () => {
 
     const fetchFriends = async () => {
         try {
-            const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/friends", {
+            const res = await fetch(`${BASE_URL}/api/user/friends`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -30,7 +31,7 @@ const Compare = () => {
     const handleAddFriend = async () => {
         if (!newCFHandle) return;
         try {
-            const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/friends/add", {
+            const res = await fetch(`${BASE_URL}/api/user/friends/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ cfHandle: newCFHandle, lcHandle: newLCHandle }),
@@ -50,7 +51,7 @@ const Compare = () => {
 
     const handleRemoveFriend = async (cfHandle) => {
         try {
-            const res = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/friends/remove", {
+            const res = await fetch(`${BASE_URL}/api/user/friends/remove`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ cfHandle }),
@@ -65,7 +66,7 @@ const Compare = () => {
     const handleCompare = async (friend) => {
         try {
             const res = await fetch(
-                `https://cp-tracker-backend-cvik.onrender.com/api/user/compare?cfHandle1=${friend.cfHandle}&lcHandle1=${friend.lcHandle}`,
+                `${BASE_URL}/api/user/compare?cfHandle1=${friend.cfHandle}&lcHandle1=${friend.lcHandle}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             const data = await res.json();

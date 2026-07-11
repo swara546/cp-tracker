@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from "chart.js";
 import Navbar from "../components/Navbar";
+import BASE_URL from "../config";
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
@@ -22,49 +23,49 @@ const Dashboard = () => {
     const fetchStats = async () => {
         setLoading(true);
         try {
-            const cfRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/cf-stats", {
+            const cfRes = await fetch(`${BASE_URL}/api/user/cf-stats`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const cfData = await cfRes.json();
             setCfStats(cfData);
 
-            const lcRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/lc-stats", {
+            const lcRes = await fetch(`${BASE_URL}/api/user/lc-stats`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const lcData = await lcRes.json();
             setLcStats(lcData);
 
-            const histRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/cf-history", {
+            const histRes = await fetch(`${BASE_URL}/api/user/cf-history`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const histData = await histRes.json();
             setCfHistory(histData.history);
 
-            const weakRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/weak-area", {
+            const weakRes = await fetch(`${BASE_URL}/api/user/weak-area`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const weakData = await weakRes.json();
             setSuggestion(weakData.suggestion);
 
-            const topicsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/lc-topics", {
+            const topicsRes = await fetch(`${BASE_URL}/api/user/lc-topics`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const topicsData = await topicsRes.json();
             setLcTopics(topicsData.topics || []);
 
-            const contestsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/upcoming-contests", {
+            const contestsRes = await fetch(`${BASE_URL}/api/user/upcoming-contests`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const contestsData = await contestsRes.json();
             setContests(contestsData.contests || []);
 
-            const goalsRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/goals", {
+            const goalsRes = await fetch(`${BASE_URL}/api/user/goals`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const goalsData = await goalsRes.json();
             setGoals(goalsData.goals);
 
-            const dailyRes = await fetch("https://cp-tracker-backend-cvik.onrender.com/api/user/daily-challenge", {
+            const dailyRes = await fetch(`${BASE_URL}/api/user/daily-challenge`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const dailyData = await dailyRes.json();
