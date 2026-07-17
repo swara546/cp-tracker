@@ -53,23 +53,19 @@ const Login = () => {
           <input
             name="username"
             placeholder="Username"
-            autoComplete="username"
+            autoComplete="off"
             onChange={handleChange}
             style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none" }}
-          />
-          <div style={{ position: "relative" }}>
-              <input
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  autoComplete="current-password"
-                  onChange={handleChange}
-                  style={{
-                      padding: "12px 16px", borderRadius: "8px",
-                      border: "1px solid #c5cae9", fontSize: "14px",
-                      outline: "none", width: "100%", boxSizing: "border-box"
-                  }}
-              />
+        />
+        <div style={{ position: "relative" }}>
+            <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                autoComplete="new-password"
+                onChange={handleChange}
+                style={{ padding: "12px 16px", borderRadius: "8px", border: "1px solid #c5cae9", fontSize: "14px", outline: "none", width: "100%", boxSizing: "border-box" }}
+            />
               <span onClick={() => setShowPassword(!showPassword)}
                   style={{
                       position: "absolute", right: "12px", top: "50%",
