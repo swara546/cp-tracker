@@ -23,67 +23,44 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const fetchStats = async () => {
-        setLoading(true);
-        try {
-            const cfRes = await fetch(`${BASE_URL}/api/user/cf-stats`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const cfData = await cfRes.json();
+    setLoading(true);
+    try {
+        const [cfRes, lcRes, histRes, weakRes, topicsRes, contestsRes, goalsRes, dailyRes] = await Promise.all([
+            fetch(`${BASE_URL}/api/user/cf-stats`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/lc-stats`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/cf-history`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/weak-area`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/lc-topics`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/upcoming-contests`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/goals`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${BASE_URL}/api/user/daily-challenge`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
 
-            if (cfData.message === "Codeforces handle not saved") {
+        const [cfData, lcData, histData, weakData, topicsData, contestsData, goalsData, dailyData] = await Promise.all([
+            cfRes.json(), lcRes.json(), histRes.json(), weakRes.json(),
+            topicsRes.json(), contestsRes.json(), goalsRes.json(), dailyRes.json()
+        ]);
+
+        if (cfData.message === "Codeforces handle not saved") {
             navigate("/profile");
             return;
-            }
-            setCfStats(cfData);
-
-            const lcRes = await fetch(`${BASE_URL}/api/user/lc-stats`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const lcData = await lcRes.json();
-            setLcStats(lcData);
-
-            const histRes = await fetch(`${BASE_URL}/api/user/cf-history`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const histData = await histRes.json();
-            setCfHistory(histData.history || []);
-
-            const weakRes = await fetch(`${BASE_URL}/api/user/weak-area`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const weakData = await weakRes.json();
-            setSuggestion(weakData.suggestion);
-
-            const topicsRes = await fetch(`${BASE_URL}/api/user/lc-topics`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const topicsData = await topicsRes.json();
-            setLcTopics(topicsData.topics || []);
-
-            const contestsRes = await fetch(`${BASE_URL}/api/user/upcoming-contests`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const contestsData = await contestsRes.json();
-            setContests(contestsData.contests || []);
-
-            const goalsRes = await fetch(`${BASE_URL}/api/user/goals`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const goalsData = await goalsRes.json();
-            setGoals(goalsData.goals);
-
-            const dailyRes = await fetch(`${BASE_URL}/api/user/daily-challenge`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const dailyData = await dailyRes.json();
-            setDailyChallenge(dailyData);
-
-            setLoading(false);
-        } catch (err) {
-            console.log(err);
-            setLoading(false);
         }
-    };
+
+        setCfStats(cfData);
+        setLcStats(lcData);
+        setCfHistory(histData.history || []);
+        setSuggestion(weakData.suggestion);
+        setLcTopics(topicsData.topics || []);
+        setContests(contestsData.contests || []);
+        setGoals(goalsData.goals);
+        setDailyChallenge(dailyData);
+
+        setLoading(false);
+    } catch (err) {
+        console.log(err);
+        setLoading(false);
+    }
+};
 
     useEffect(() => {
         if (!token) return;

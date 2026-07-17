@@ -99,8 +99,24 @@ const Profile = () => {
                         <input name="lcSolvedGoal" type="number" placeholder="LC Problems Goal (e.g. 500)" onChange={handleGoalChange} style={inputStyle} />
                         <button type="submit" style={buttonStyle}>Save Goals</button>
                     </form>
+                    <button type="button" onClick={async () => {
+                    try {
+                        await fetch(`${BASE_URL}/api/user/goals`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                            body: JSON.stringify({ cfRatingGoal: 0, lcSolvedGoal: 0 }),
+                        });
+                        alert("Goals cleared!");
+                    } catch(err) {
+                        alert("Something went wrong");
+                    }
+                }} style={{
+                    padding: "12px", background: "#e57373",
+                    color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer"
+                }}>
+                    Clear Goals
+                </button>
                 </div>
-
             </div>
         </div>
     );
