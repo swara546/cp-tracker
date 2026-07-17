@@ -4,6 +4,7 @@ import { Doughnut, Line, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement } from "chart.js";
 import Navbar from "../components/Navbar";
 import BASE_URL from "../config";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, BarElement);
 
@@ -19,6 +20,7 @@ const Dashboard = () => {
     const [contests, setContests] = useState([]);
     const [goals, setGoals] = useState(null);
     const [dailyChallenge, setDailyChallenge] = useState(null);
+    const navigate = useNavigate();
 
     const fetchStats = async () => {
         setLoading(true);
@@ -27,6 +29,11 @@ const Dashboard = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const cfData = await cfRes.json();
+
+            if (cfData.message === "Codeforces handle not saved") {
+            navigate("/profile");
+            return;
+            }
             setCfStats(cfData);
 
             const lcRes = await fetch(`${BASE_URL}/api/user/lc-stats`, {
@@ -39,7 +46,7 @@ const Dashboard = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const histData = await histRes.json();
-            setCfHistory(histData.history);
+            setCfHistory(histData.history || []);
 
             const weakRes = await fetch(`${BASE_URL}/api/user/weak-area`, {
                 headers: { Authorization: `Bearer ${token}` }
