@@ -371,7 +371,6 @@ exports.getUpcomingContests = async (req, res) => {
 
         const upcoming = data.result
             .filter(contest => contest.phase === "BEFORE")
-            .sort((a,b)=>a.startTimeSeconds-b.startTimeSeconds)
             .slice(0, 5)
             .reverse()
             .map(contest => ({
