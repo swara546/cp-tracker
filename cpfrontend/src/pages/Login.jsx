@@ -8,7 +8,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,7 +15,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
@@ -32,9 +30,6 @@ const Login = () => {
       }
     } catch (err) {
       alert("Something went wrong");
-    }
-    finally{
-      setLoading(false)
     }
   };
 
@@ -79,11 +74,10 @@ const Login = () => {
                   {showPassword ? "🙈" : "👁️"}
               </span>
           </div>
-          <button type="submit" disabled={isLoading} style={{
+          <button type="submit" style={{
             padding: "12px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
             color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", marginTop: "8px"
           }}>
-            {isLoading ? "Logging in..." : "Login"} 
           </button>
         </form>
         <p style={{ textAlign: "center", marginTop: "20px", color: "#7986cb", cursor: "pointer" }}
