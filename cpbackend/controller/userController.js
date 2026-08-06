@@ -373,11 +373,17 @@ exports.getUpcomingContests = async (req, res) => {
             .filter(contest => contest.phase === "BEFORE")
             .sort((a,b)=>a.startTimeSeconds-b.startTimeSeconds)
             .slice(0, 5)
-            .reverse()
             .map(contest => ({
                 id: contest.id,
                 name: contest.name,
-                startTime: new Date(contest.startTimeSeconds * 1000).toLocaleString(),
+                startTime: new Date(contest.startTimeSeconds * 1000).toLocaleString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true
+                }),
                 duration: Math.floor(contest.durationSeconds / 3600) + " hrs " + Math.floor((contest.durationSeconds % 3600) / 60) + " mins",
                 type: contest.type
             }));
