@@ -77,7 +77,7 @@ const Login = () => {
           <button type="submit" style={{
             padding: "12px", background: "linear-gradient(135deg, #2d3561, #7986cb)",
             color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", marginTop: "8px"
-          }}>
+          }}>Login
           </button>
         </form>
         <p style={{ textAlign: "center", marginTop: "20px", color: "#7986cb", cursor: "pointer" }}
