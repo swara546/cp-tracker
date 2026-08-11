@@ -198,7 +198,7 @@ exports.compareUsers = async (req, res) => {
         }
 
         const getLCStats = async (handle) => {
-            if (!handle) return { totalSolved: 0, easySolved: 0, mediumSolved: 0, hardSolved: 0 };
+            if (!handle || handle === "") return { totalSolved: 0, easySolved: 0, mediumSolved: 0, hardSolved: 0 };
             try {
                 const res = await fetch('https://leetcode.com/graphql', {
                     method: 'POST',

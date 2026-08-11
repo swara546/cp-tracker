@@ -6,9 +6,10 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(sessionStorage.getItem("token") || null);
 
     const login = (newToken) => {
-        sessionStorage.setItem("token", newToken);
-        setToken(newToken);
-    };
+    sessionStorage.clear(); 
+    sessionStorage.setItem("token", newToken);
+    setToken(newToken);
+};
 
     const logout = () => {
         sessionStorage.removeItem("token");
